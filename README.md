@@ -1,0 +1,1 @@
+# is-gorusmesi-once-hazirlik
