@@ -40,37 +40,36 @@ sudo netplan apply
 sudo apt update
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
 ```
-### docker
+### docker ve docker stable
 ```bash
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 ```
-### docker stable
 ```bash
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
-### docker yükleme
+#### docker yükleme
 ```bash
 sudo apt update
 sudo apt install docker-ce docker-ce-cli containerd.io
 ```
-### docker compose yükleme
+#### docker compose yükleme
 ```bash
 sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 ```
-### docker compose çalıştırabilmek için binary
+#### docker compose çalıştırabilmek için binary
 ```bash
 sudo chmod +x /usr/local/bin/docker-compose
 ```
-### versiyon
+#### versiyon
 ```bash
 docker --version
 docker-compose --version
 ```
-### Busybox kurulumu
+#### Busybox kurulumu
 ```bash
 sudo docker pull busybox:1.35.0
 ```
-### docker-compose kurulumu
+### wordpress
 ```bash
 mkdir wordpress/
 cd wordpress/
@@ -108,43 +107,43 @@ volumes:
   db_data:
   wp_data:
 ```
-### docker-compose servisi başlatma
+#### docker-compose servisi başlatma
 ```bash
 sudo docker-compose -f docker-compose-wordpress.yaml up -d
 ```
-### wordpress konteynır id
+#### wordpress konteynır id
 ```bash
 WP_CONTAINER_ID=$(sudo docker-compose -f docker-compose-wordpress.yaml ps -q wordpress)
 ```
-### wordpress servie loglarını ekrana yazdırma
+#### wordpress servie loglarını ekrana yazdırma
 ```bash
 sudo docker logs $WP_CONTAINER_ID
 ```
-### imaj bilgilerini ekrana yazdırma
+#### imaj bilgilerini ekrana yazdırma
 ```bash
 sudo docker images
 ```
-### database konteynır id
+#### database konteynır id
 ```bash
 DB_CONTAINER_ID=$(sudo docker-compose -f docker-compose-wordpress.yaml ps -q db)
 ```
-### veritabanı konteynırına giriş ve tablolaları yazdırma
+#### veritabanı konteynırına giriş ve tablolaları yazdırma
 ```bash
 sudo docker exec -it $DB_CONTAINER_ID bash
 mysql -u root -p wordpress
 ```
-Şifremiz: somewordpress
+Şifremiz: `somewordpress`
 ```bash
 show tables;
 exit;
 exit;
 ```
 
-### servisi durdurma
+#### servisi durdurma
 ```bash
 sudo docker-compose -f docker-compose-wordpress.yaml down
 ```
-### imajları silme
+#### imajları silme
 ```bash
 sudo nano remove-images.sh
 ```
@@ -173,46 +172,13 @@ sudo chmod +x remove-images.sh
 ## rockylinux
 
 ### LinuxAdmin user
-Şifre koşullarını değiştir
-```bash
-sudo nano /etc/pam.d/system-auth
-```
-```bash
-auth        required                                     pam_env.so
-auth        required                                     pam_faildelay.so delay=2000000
-auth        [default=1 ignore=ignore success=ok]         pam_usertype.so isregular
-auth        [default=1 ignore=ignore success=ok]         pam_localuser.so
-auth        sufficient                                   pam_unix.so nullok
-auth        [default=1 ignore=ignore success=ok]         pam_usertype.so isregular
-auth        sufficient                                   pam_sss.so forward_pass
-auth        required                                     pam_deny.so
-
-account     required                                     pam_unix.so
-account     sufficient                                   pam_localuser.so
-account     sufficient                                   pam_usertype.so issystem
-account     [default=bad success=ok user_unknown=ignore] pam_sss.so
-account     required                                     pam_permit.so
-
-# password    requisite                                    pam_pwquality.so local_users_only use_authok sildim alt satirdan
-password    sufficient                                   pam_unix.so sha512 shadow nullok
-password    [success=1 default=ignore]                   pam_localuser.so
-password    sufficient                                   pam_sss.so use_authtok
-password    required                                     pam_deny.so
-
-session     optional                                     pam_keyinit.so revoke
-session     required                                     pam_limits.so
--session    optional                                     pam_systemd.so
-session     [success=1 default=ignore]                   pam_succeed_if.so service in crond quiet use_uid
-session     required                                     pam_unix.so
-session     optional                                     pam_sss.so
-
-```
+`LinuxAdmin`  kullanıcısı ekle
 ```bash
 sudo useradd LinuxAdmin
 sudo passwd LinuxAdmin
 ```
-Şifremiz: SysAdmin99
-### LinuxAdmin root şifresi kaldırma
+Şifremiz: `SysAdmin99`
+### `LinuxAdmin`  root şifresi kaldırma
 ```bash
 sudo nano /etc/sudoers
 ```
@@ -222,6 +188,8 @@ LinuxAdmin ALL=(ALL) NOPASSWD:ALL
 ```
 ### tarih bas
 ```bash
+mkdir files/
+cd files/
 nano tarih-bas.sh
 ```
 ```bash
@@ -235,10 +203,15 @@ echo "Ad: $username"
 echo "Saat: $currenttime"
 echo "Tarih: $currentdate"
 ```
+Root yetkisi ver
+```bash
 sudo chown root tarih-bas.sh
+```
+İzinleri 777 olarak değiştir
+```bash
 sudo chmod 777 tarih-bas.sh
-sudo systemctl stop ufw
-systemctl status ufw
+```
+
 
 ### Error anahtar kelimesini filtreleme
 ```bash
@@ -247,10 +220,15 @@ sudo chown $username:$username /home/LinuxAdmin
 grep -i "error" /var/log/syslog | sudo tee /home/LinuxAdmin/error.logs
 ```
 ### k3s
+
+```bash
+# firewalld durdur
+systemctl disable firewalld --now
+```
 Burda bir hata alıyorum çözemedim.
 ```bash
 curl -sfL https://get.k3s.io | sh -
-curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-sudo chmod +x ./kubectl
-sudo mv ./kubectl /usr/local/bin/kubectl
+curl -sfL https://get.k3s.io | K3S_URL=https://myserver:6443 K3S_TOKEN=mynodetoken sh -
+sudo k3s kubectl get node
+# Burada hata veriyor. Henüz çözemedim.
 ```
