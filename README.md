@@ -220,6 +220,26 @@ Dosyanın sonuna eklenecek
 ```bash
 LinuxAdmin ALL=(ALL) NOPASSWD:ALL
 ```
+### tarih bas
+```bash
+nano tarih-bas.sh
+```
+```bash
+#!/bin/bash
+
+username=$(whoami)
+currenttime=$(date +"%T")
+currentdate=$(date +"%D")
+
+echo "Ad: $username"
+echo "Saat: $currenttime"
+echo "Tarih: $currentdate"
+```
+sudo chown root tarih-bas.sh
+sudo chmod 777 tarih-bas.sh
+sudo systemctl stop ufw
+systemctl status ufw
+
 ### Error anahtar kelimesini filtreleme
 ```bash
 username=$(whoami)
@@ -229,6 +249,7 @@ grep -i "error" /var/log/syslog | sudo tee /home/LinuxAdmin/error.logs
 ### k3s
 Burda bir hata alıyorum çözemedim.
 ```bash
+curl -sfL https://get.k3s.io | sh -
 curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
 sudo chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
