@@ -12,8 +12,11 @@ Home dizini içinde:
  ```
 Host makine
 ```bash
- vagrant up machine1
- vagrant ssh machine1
+ cd Applications/
+ cd VirtualBoxMachines/
+ cd ubuntu/
+ vagrant up ubuntum
+ vagrant ssh ubuntum
 ```
 ## Ubuntu
 ### DNS
@@ -170,7 +173,14 @@ sudo chmod +x remove-images.sh
 ./remove-images.sh
 ```
 ## rockylinux
-
+-Host makine
+```bash
+ cd Applications/
+ cd VirtualBoxMachines/
+ cd rockyLinux/
+ vagrant up rockym
+ vagrant ssh rockym
+```
 ### LinuxAdmin user
 `LinuxAdmin`  kullanıcısı ekle
 ```bash
