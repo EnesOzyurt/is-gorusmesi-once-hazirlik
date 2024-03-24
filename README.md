@@ -10,6 +10,7 @@ Home dizini içinde:
  vagrant box add ubuntu/focal64
  vagrant up
  ```
+Makine1:
  ```bash
  logout
  vagrant halt
@@ -83,11 +84,7 @@ mysql -u root -p wordpress
 ```
 ```bash
 show tables;
-```
-```bash
 exit;
-```
-```bash
 exit;
 ```
 
