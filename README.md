@@ -1,5 +1,17 @@
 # is-gorusmesi-once-hazirlik
 
+## Virtualbox IP aralığı
+
+### networks.conf
+/etc/vbox/networks.conf içine IP aralığını denetimini kapatmak için aşağıdaki satırı ekledim. [Kaynak](https://forums.virtualbox.org/viewtopic.php?p=527225&hilit=networks.conf#p527225)
+```
+* 0.0.0.0/0 ::/0
+```
+Ancak okudupum kadarıyla Virtualbox 6.1 üstü sürümlerinde IP aralığında 198.162.63.254'in üstünü kabûl etmiyor. [Kaynak](https://stackoverflow.com/questions/69728426/e-accessdenied-when-creating-a-host-only-interface-on-virtualbox-via-vagrant) Kendi denememde 198.162.56.255'in üstünü yine kabûl etmedi. Hata kodu:
+```bash
+VBoxManage: error: Code E_ACCESSDENIED (0x80070005) - Access denied
+```
+
 Home dizini içinde:
  ```bash
  mkdir Applications
@@ -20,6 +32,7 @@ Host makine
 ```
 ## Ubuntu
 ### DNS
+nameservers: altına address: [8.8.8.8. 8.8.4.4] eklendi.
 ```bash
 sudo nano /etc/netplan/50-cloud-init.yaml
 ```
@@ -73,6 +86,7 @@ docker-compose --version
 sudo docker pull busybox:1.35.0
 ```
 ### wordpress
+Docker github'ındaki hazır [wordpress'i](https://github.com/docker/awesome-compose/blob/master/official-documentation-samples/wordpress/README.md) kullandım.
 ```bash
 mkdir wordpress/
 cd wordpress/
@@ -241,4 +255,8 @@ curl -sfL https://get.k3s.io | sh -
 curl -sfL https://get.k3s.io | K3S_URL=https://myserver:6443 K3S_TOKEN=mynodetoken sh -
 sudo k3s kubectl get node
 # Burada hata veriyor. Henüz çözemedim.
+```
+Hata kodu:
+```bash
+E0324 16:40:43.718588   33368 memcache.go:265] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": dial tcp [::1]:8080: connect: connection refused
 ```
