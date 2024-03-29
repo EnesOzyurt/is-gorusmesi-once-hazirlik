@@ -11,6 +11,7 @@ Ancak okuduğum kadarıyla Virtualbox 6.1 üstü sürümlerinde IP aralığında
 ```bash
 VBoxManage: error: Code E_ACCESSDENIED (0x80070005) - Access denied
 ```
+Bu yüzden IP aralıklarını ubuntu için 192.168.56.100, rockylinux için 192.168.56.200 yaptım.
 
 Home dizini içinde:
  ```bash
@@ -32,9 +33,9 @@ Host makine
 ```
 ## Ubuntu
 ### DNS
-nameservers: altına 
+nameservers: altına aşağıdaki satır eklendi.
 ```yaml
-address: [8.8.8.8. 8.8.4.4] eklendi.
+address: [8.8.8.8. 8.8.4.4]
 ```
 ```bash
 sudo nano /etc/netplan/50-cloud-init.yaml
