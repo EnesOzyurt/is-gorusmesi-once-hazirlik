@@ -7,7 +7,7 @@
 ```
 * 0.0.0.0/0 ::/0
 ```
-Ancak okudupum kadarıyla Virtualbox 6.1 üstü sürümlerinde IP aralığında 198.162.63.254'in üstünü kabûl etmiyor. [Kaynak](https://stackoverflow.com/questions/69728426/e-accessdenied-when-creating-a-host-only-interface-on-virtualbox-via-vagrant) Kendi denememde 198.162.56.255'in üstünü yine kabûl etmedi. Hata kodu:
+Ancak okuduğum kadarıyla Virtualbox 6.1 üstü sürümlerinde IP aralığında 198.162.63.254'in üstünü kabûl etmiyor. [Kaynak](https://stackoverflow.com/questions/69728426/e-accessdenied-when-creating-a-host-only-interface-on-virtualbox-via-vagrant) Kendi denememde 198.162.56.255'in üstünü yine kabûl etmedi. Hata kodu:
 ```bash
 VBoxManage: error: Code E_ACCESSDENIED (0x80070005) - Access denied
 ```
@@ -32,7 +32,10 @@ Host makine
 ```
 ## Ubuntu
 ### DNS
-nameservers: altına address: [8.8.8.8. 8.8.4.4] eklendi.
+nameservers: altına 
+```yaml
+address: [8.8.8.8. 8.8.4.4] eklendi.
+```
 ```bash
 sudo nano /etc/netplan/50-cloud-init.yaml
 ```
